@@ -1,0 +1,43 @@
+.flex 
+  display: flex
+  flex-wrap: wrap
+
+.default 
+  font-family: sans-serif
+
+  td 
+    text-align: center  
+
+  [data-selected] 
+    &::before 
+      content: '['    
+
+    &::after 
+      content: ']'    
+
+    background-color: aqua
+    border-radius: 50%
+
+.custom 
+  @extend .default 
+  font-style: italic
+  [data-selected]
+    background-color:  transparent
+
+  caption 
+    text-decoration: underline
+  
+
+
+.popup 
+  position: absolute
+  box-shadow: 0 0 20px 3px gray
+  background-color: white
+
+
+.dateselector
+  border: 1px solid gray
+  text-align: right
+  &::after 
+    content: '📆'
+
