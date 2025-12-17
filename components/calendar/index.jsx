@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 import { LocaleContext } from './context';
 import { Calendar } from './calendar';
 import classes from './calendar.module.sass';
-import { useDateInput } from './useDateInputHook';
+import { useDateInput } from './useDateInputHook'; //  Custom Hook
 
 export function DemoCalendarPage() {
   const
@@ -25,7 +25,6 @@ export function DemoCalendarPage() {
         <DemoResult />
         <DemoPopUp />
         <DemoSelectDay />
-
         <Demo2 />
         <Demo1 />
       </main>
@@ -34,19 +33,21 @@ export function DemoCalendarPage() {
 }
 
 
-function Demo1() {
+function Demo1() { // сначала просто вызовем в произвольном контексте
   return <fieldset>
+    <legend>отдельный контекст</legend>
     <LocaleContext value='ja'>
       <Calendar date={new Date} className={classes.custom} />
     </LocaleContext>
   </fieldset>
 }
 
-function Demo2() {
+function Demo2() { // затем проверим компонент как приемник данных 
   const
     { ref, date } = useDateInput()
   // [date, setDate] = useState(new Date);
   return <fieldset>
+    <legend>as output</legend>
     {/* <input type="month" value={DateToYYYYMM(date)} onInput={event => setDate(YYYYMMToDate(event.target.value))} /> */}
     <input type="month" ref={ref} />
     <Calendar date={date} />
@@ -60,18 +61,8 @@ function Demo2() {
 //   const [year, month] = str.split('-');
 //   return new Date(year, month - 1, 1);
 // }
-function DemoSelectDay() {
-  const
-    locale = useContext(LocaleContext),
-    [date, setDate] = useState(new Date);
 
-  return <fieldset>
-    date: {date.toLocaleDateString(locale)}
-    <SelectDay date={date} setDate={setDate} />
-  </fieldset>
-}
-
-function SelectDay({ date, setDate }) {
+function SelectDay({ date, setDate }) { // создадим обертку для выбора даты
   return <div onClick={
     event => {
       const day = +event.target.closest('td[data-day]')?.dataset?.day;
@@ -83,15 +74,25 @@ function SelectDay({ date, setDate }) {
   </div>
 }
 
+function DemoSelectDay() { // проверим обертку в работе
+  const
+    locale = useContext(LocaleContext),
+    [date, setDate] = useState(new Date);
 
+  return <fieldset>
+    <legend>as input</legend>
+    date: {date.toLocaleDateString(locale)}
+    <SelectDay date={date} setDate={setDate} />
+  </fieldset>
+}
 
-export function PopupWindow({ children }) {
+export function PopupWindow({ children }) { // компонент Popup
   return <div className={classes.popup}>
     {children}
   </div>
 }
 
-function DemoPopUp() {
+function DemoPopUp() { // продемонстрируем работу Popup
   const
     [visible, setVisible] = useState(false);
   return <fieldset>
@@ -104,7 +105,7 @@ function DemoPopUp() {
   </fieldset>;
 }
 
-function DemoResult() {
+function DemoResult() { // итог 
   const
     [date, setDate] = useState(new Date),
     [open, setOpen] = useState(false),
@@ -116,7 +117,7 @@ function DemoResult() {
       onClick={onClick1}
       className={classes.dateselector}
     >
-      {date.toLocaleDateString()}
+      {date.toLocaleDateString('en')}
     </div>
     <div onClick={onClick2}>
       {open && <PopupWindow>
