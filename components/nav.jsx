@@ -5,6 +5,7 @@ const
     { href: '/', name: 'Home' },
     { href: '/state', name: 'States' },
     { href: '/effect', name: 'Fetch users' },
+    { href: '/todo', name: 'Todo' },
   ]
 
 export function Nav() {
